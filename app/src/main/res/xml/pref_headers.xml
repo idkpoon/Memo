@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <Preference
+        android:key="@string/key_pref_general"
+        android:title="@string/label_pref_general"
+        android:icon="@drawable/ic_person"
+        android:layout="@layout/font_layout"/>
+
+        <Preference
+            android:key="@string/key_pref_categories"
+            android:title="@string/label_pref_categories"
+            android:icon="@drawable/ic_list"
+            android:layout="@layout/font_layout"/>
+
+        <Preference
+            android:key="@string/key_pref_productivity"
+            android:title="@string/label_pref_productivity"
+            android:icon="@drawable/ic_chart"
+            android:layout="@layout/font_layout"/>
+
+
+        <!--<Preference-->
+            <!--android:key="@string/key_pref_notifications"-->
+            <!--android:title="@string/label_pref_notifications"-->
+            <!--android:icon="@drawable/ic_notifications"/>-->
+
+        <Preference
+            android:key="@string/key_pref_delete"
+            android:title="@string/label_pref_delete"
+            android:icon="@drawable/ic_delete"
+            android:layout="@layout/font_layout"/>
+
+
+</PreferenceScreen>
