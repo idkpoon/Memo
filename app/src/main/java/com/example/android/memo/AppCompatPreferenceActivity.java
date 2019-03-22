@@ -1,6 +1,5 @@
 package com.example.android.memo;
 
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -19,7 +18,7 @@ import android.view.ViewGroup;
  */
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
-    private AppCompatDelegate mDelegate;
+    private AppCompatDelegate compatDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +101,10 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
     }
 
     private AppCompatDelegate getDelegate() {
-        if (mDelegate == null) {
-            mDelegate = AppCompatDelegate.create(this, null);
+        if (compatDelegate == null) {
+            compatDelegate = AppCompatDelegate.create(this, null);
         }
-        return mDelegate;
+        return compatDelegate;
     }
 
 
