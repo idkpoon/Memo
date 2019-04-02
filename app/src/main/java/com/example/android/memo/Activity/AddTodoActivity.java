@@ -44,6 +44,8 @@ public class AddTodoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+
         etTaskName = (EditText)findViewById(R.id.editTextTodoName);
         btnDatePicker = (Button)findViewById(R.id.btnDatePicker);
         btnTimePicker = (Button)findViewById(R.id.btnTimePicker);

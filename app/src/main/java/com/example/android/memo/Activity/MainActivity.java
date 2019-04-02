@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import com.example.android.memo.CustomTypefaceSpan;
 import com.example.android.memo.Fragments.InboxFragment;
 import com.example.android.memo.Fragments.ListFragment;
-import com.example.android.memo.Fragments.SettingsFragment;
 import com.example.android.memo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mTitle;
     private NavigationView navigationView;
     private FloatingActionButton fabAdd;
+
+    String lastVisitedFragment = "Inbox";
 
     TextView name;
     TextView productivityLevel;
@@ -90,16 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar_menu);
         mTitle = (TextView) mToolbar.findViewById(R.id.toolbar_title);
         mTitle.setTypeface(futuraFont);
-        setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_dehaze);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "THE NAV MENU IS CLICKED WOOP", Toast.LENGTH_LONG).show();
-            }
-        });
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -114,10 +110,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (lastVisitedFragment.equals(R.string.title_inbox)){
+            navigationView.setCheckedItem(R.id.nav_inbox);
+        }
+        else if(lastVisitedFragment.equals(R.string.title_list)){
+            navigationView.setCheckedItem(R.id.nav_list);
+        }
     }
 
     @Override
@@ -130,22 +138,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.fragment_main_container, new InboxFragment()).commit();
                 mTitle.setText(R.string.title_inbox);
                 Toast.makeText(this, "Frag changed to inbox", Toast.LENGTH_SHORT).show();
+                lastVisitedFragment = getString(R.string.title_inbox);
                 break;
             case R.id.nav_list:
                 fragmentTransaction.replace(R.id.fragment_main_container, new ListFragment()).commit();
                 mTitle.setText(R.string.title_list);
                 Toast.makeText(this, "Frag changed to list", Toast.LENGTH_SHORT).show();
+                navigationView.setCheckedItem(R.id.nav_list);
+                lastVisitedFragment = getString(R.string.title_list);
                 break;
             case R.id.nav_settings:
-                fragmentTransaction.replace(R.id.fragment_main_container, new SettingsFragment()).commit();
-                mTitle.setText(R.string.title_settings);
-                Toast.makeText(this, "Frag changed to settings", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(i);
                 break;
 
             case R.id.nav_logout:
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();
-                Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
+                i = new Intent(MainActivity.this, WelcomeActivity.class);
                 startActivity(i);
                 break;
 

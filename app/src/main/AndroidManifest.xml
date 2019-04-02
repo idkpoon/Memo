@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".Activity.WelcomeActivity" />
         <activity android:name=".Activity.AddTodoActivity" />
+        <activity android:name=".Activity.SettingsActivity"
+            android:theme="@style/AppTheme.Preferences"/>
     </application>
 
 </manifest>

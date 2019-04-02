@@ -1,9 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:key="categories"
-        android:title="Categories"
-        android:summary="idk"/>
+    <PreferenceCategory
+        android:title="Priority">
 
+        <Preference
+            android:title="Urgent"
+            android:key="priority_urgent"
+            android:summary="High priority"/>
+
+        <Preference
+            android:title="Do soon"
+            android:key="priority_do_soon"
+            android:summary="Normal Priority"/>
+
+        <Preference
+            android:title="When you have time"
+            android:key="priority_when_you_have_time"
+            android:summary="Low Priority"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Categories">
+
+        <Preference
+            android:title="School"
+            android:key="category_school" />
+
+        <Preference
+            android:title="Personal"
+            android:key="category_school" />
+
+        <Preference
+            android:title="Errands"
+            android:key="category_school" />
+
+        <Preference
+            android:title="Other"
+            android:key="category_school" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

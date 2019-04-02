@@ -1,27 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fragment="com.example.android.memo.Fragments.GeneralPreferencesFragment">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
 
     <EditTextPreference
-        android:key="@string/key_pref_name"
         android:title="@string/label_pref_name"
-        android:summary="@string/summary_pref_name"/>
+        android:summary="@string/summary_pref_name"
+        android:key="@string/key_pref_name" />
 
     <EditTextPreference
-        android:key="@string/key_pref_email"
         android:title="@string/label_pref_email"
-        android:summary="@string/summary_pref_email"/>
+        android:summary="@string/summary_pref_email"
+        android:key="@string/key_pref_email"/>
 
-    <EditTextPreference
-        android:key="@string/key_pref_password"
+    <Preference
         android:title="@string/label_pref_password"
-        android:summary="@string/summary_pref_password"/>
+        android:summary="@string/summary_pref_password"
+        android:key="@string/key_pref_password"/>
 
     <ListPreference
-        android:key="@string/key_pref_timezone"
         android:title="@string/label_pref_timezone"
-        android:summary="@string/summary_pref_timezone"/>
-
-
+        android:summary="@string/summary_pref_timezone"
+        android:key="@string/key_pref_timezone"/>
 
 </PreferenceScreen>
