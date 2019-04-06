@@ -11,9 +11,10 @@
         android:summary="@string/summary_pref_email"
         android:key="@string/key_pref_email"/>
 
-    <Preference
+    <com.example.android.memo.dialogs.PasswordPreference
         android:title="@string/label_pref_password"
         android:summary="@string/summary_pref_password"
+        android:dialogLayout="@layout/password_dialog"
         android:key="@string/key_pref_password"/>
 
     <ListPreference

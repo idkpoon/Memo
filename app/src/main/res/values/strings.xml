@@ -59,9 +59,6 @@
     <string name="summary_pref_password">Enter your email. A confirmation link will be sent to you</string>
     <string name="summary_pref_timezone">Select timezone</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_preferences">Settings</string>
 
     <!-- Strings related to Settings -->
 
@@ -87,9 +84,6 @@
         <item>0</item>
         <item>-1</item>
     </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
@@ -123,18 +117,25 @@
 
     <string-array name="multi_select_list_preference_default_value" />
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
     <string name="enter_email">Enter Email</string>
+    <string name="preference_title">Settings</string>
+    <string name="change_password_message">Enter your email and we will send an email to change your password</string>
+    <string name="pref_header_categories">Categories</string>
+    <string name="pref_header_productivity">Productivity</string>
+
+    <string name="key_category_1" translatable="false">category_1</string>
+    <string name="key_category_2" translatable="false">category_2</string>
+    <string name="key_category_3" translatable="false">category_3</string>
+    <string name="key_category_4" translatable="false">category_4</string>
+    <string name="key_category_5" translatable="false">category_5</string>
+    <string name="daily_tasks_dialog_title">Pick number of daily tasks</string>
+
+    <string name="key_pref_daily_goal" translatable="false">daily_goal</string>
+    <string name="daily_goal_default">5 tasks</string>
+    <string name="key_pref_vacation">vacation</string>
+    <string name="key_pref_vacation_mode">Vacation mode</string>
+    <string name="vacation_mode_message">When you\'re on vacation mode, you\'re daily goal reminder will be switched off</string>
+    <string name="priority_urgent">priority_urgent</string>
 
 
 </resources>

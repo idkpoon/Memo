@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.android.memo.FragmentCommunicator;
-import com.example.android.memo.Fragments.LoginFragment;
-import com.example.android.memo.Fragments.SignupFragment;
+import com.example.android.memo.fragments.LoginFragment;
+import com.example.android.memo.fragments.SignupFragment;
 import com.example.android.memo.R;
 
 public class WelcomeActivity extends AppCompatActivity implements FragmentCommunicator {

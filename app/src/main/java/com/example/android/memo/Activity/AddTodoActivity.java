@@ -15,11 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.memo.R;
-import com.example.android.memo.database.TodoContract;
 import com.example.android.memo.database.TodoContract.TodoEntry;
 import com.example.android.memo.database.TodoDBHelper;
-
-import java.lang.reflect.Type;
 
 public class AddTodoActivity extends AppCompatActivity {
 

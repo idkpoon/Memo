@@ -1,21 +1,25 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         android:title="Priority">
 
         <Preference
             android:title="Urgent"
-            android:key="priority_urgent"
+            android:key="@string/priority_urgent"
+            android:layout="@layout/priority_layout"
             android:summary="High priority"/>
 
         <Preference
             android:title="Do soon"
             android:key="priority_do_soon"
+            android:layout="@layout/priority_layout"
             android:summary="Normal Priority"/>
 
         <Preference
             android:title="When you have time"
             android:key="priority_when_you_have_time"
+            android:layout="@layout/priority_layout"
             android:summary="Low Priority"/>
 
     </PreferenceCategory>
@@ -23,21 +27,44 @@
     <PreferenceCategory
         android:title="Categories">
 
-        <Preference
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="#03a9f4"
+            android:key="@string/key_category_1"
+            android:summary=""
             android:title="School"
-            android:key="category_school" />
+            colorShape="circle"
+            app:colorChoices="@array/color_choices"
+            app:numColumns="5"
+            app:showDialog="true" />
 
-        <Preference
-            android:title="Personal"
-            android:key="category_school" />
-
-        <Preference
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="#009688"
+            android:key="@string/key_category_2"
             android:title="Errands"
-            android:key="category_school" />
+            colorShape="circle"
+            app:colorChoices="@array/color_choices"
+            app:numColumns="5"
+            app:showDialog="true" />
 
-        <Preference
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="#ffc107"
+            android:key="@string/key_category_3"
+            android:title="Personal"
+            colorShape="circle"
+            app:colorChoices="@array/color_choices"
+            app:numColumns="5"
+            app:showDialog="true" />
+
+        <com.kizitonwose.colorpreference.ColorPreference
+            android:defaultValue="#e91e63"
+            android:key="@string/key_category_4"
             android:title="Other"
-            android:key="category_school" />
+            colorShape="circle"
+            app:colorChoices="@array/color_choices"
+            app:numColumns="5"
+            app:showDialog="true" />
 
     </PreferenceCategory>
+
+
 </PreferenceScreen>

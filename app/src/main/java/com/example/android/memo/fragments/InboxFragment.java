@@ -1,8 +1,7 @@
-package com.example.android.memo.Fragments;
+package com.example.android.memo.fragments;
 
 
 import android.annotation.TargetApi;
-import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

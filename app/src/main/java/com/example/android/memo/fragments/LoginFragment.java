@@ -1,4 +1,4 @@
-package com.example.android.memo.Fragments;
+package com.example.android.memo.fragments;
 
 
 import android.content.Intent;
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.android.memo.Activity.MainActivity;
-import com.example.android.memo.Activity.WelcomeActivity;
 import com.example.android.memo.FragmentCommunicator;
 import com.example.android.memo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,18 +26,21 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SignupFragment extends Fragment {
+public class LoginFragment extends Fragment {
 
-    private Button btnSignup, btnGoToLogin;
-    private EditText ETemail, ETpassword;
-    private TextView appTitle, loginTitle;
-    private FirebaseAuth mAuth;
     static FragmentCommunicator fragmentCommunicator;
-    private String TAG = "SignupFragment";
+
+    private EditText ETEmail, ETPass;
+    private Button btnForgotPass, btnLogin, btnGoToSignup;
+    private TextView appTitle, loginTitle;
+
+    private FirebaseAuth mAuth;
+
+    private String TAG = "LoginFragment";
+
     public Typeface helveticaFont;
 
-
-    public SignupFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -48,13 +50,14 @@ public class SignupFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         helveticaFont = Typeface.createFromAsset(getActivity().getAssets(), "Fonts/HelveticaNeue-Thin.ttf");
-        // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_signup, container, false);
 
-        btnGoToLogin = (Button) root.findViewById(R.id.btnGotoLogin);
-        ETemail = (EditText) root.findViewById(R.id.editTextEmail);
-        ETpassword = (EditText) root.findViewById(R.id.editTextPassword);
-        btnSignup = (Button)root.findViewById(R.id.btnSignup);
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_login, container, false);
+        ETEmail = (EditText) root.findViewById(R.id.editTextEmail);
+        ETPass = (EditText) root.findViewById(R.id.editTextPassword);
+        btnForgotPass = (Button)root.findViewById(R.id.btnForgotPassword);
+        btnLogin = (Button)root.findViewById(R.id.btnLogin);
+        btnGoToSignup = (Button)root.findViewById(R.id.btnGoToSignUp);
         appTitle = (TextView)root.findViewById(R.id.app_title);
         loginTitle = (TextView)root.findViewById(R.id.loginTitle);
 
@@ -62,48 +65,54 @@ public class SignupFragment extends Fragment {
         loginTitle.setTypeface(helveticaFont);
 
 
-        btnGoToLogin.setOnClickListener(new View.OnClickListener() {
+
+        mAuth = FirebaseAuth.getInstance();
+
+        btnGoToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragmentCommunicator.changeFragment(v, "Signup");
+                fragmentCommunicator.changeFragment(v, "Login");
 
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
-
-        btnSignup.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = ETemail.getText().toString().trim();
-                String password = ETpassword.getText().toString().trim();
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                String email = ETEmail.getText().toString().trim();
+                String password = ETPass.getText().toString().trim();
+
+
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "SignUpWithEmail:success");
+                            Log.d(TAG, "signInWithEmail:success");
 
-
+                            Intent i = new Intent(getActivity(), MainActivity.class);
+                            startActivity(i);
 
                             FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "SignUpwithEmail:failure", task.getException());
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
                         }
                     }
                 });
+
             }
         });
 
+
         return root;
 
-
-
+    }
+    public static void setFragmentCommunicatorListener(FragmentCommunicator listener){
+        fragmentCommunicator = listener;
     }
 
-    public static void setFragCom(FragmentCommunicator listener){
-        fragmentCommunicator =listener;
-    }
+
 
 }

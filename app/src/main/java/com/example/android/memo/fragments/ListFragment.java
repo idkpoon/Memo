@@ -1,10 +1,8 @@
-package com.example.android.memo.Fragments;
+package com.example.android.memo.fragments;
 
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
