@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.example.android.memo.dialogs.NumberPickerPreference
+        android:title="Daily goal"
+        android:key="@string/key_pref_daily_goal"
+        android:summary="@string/daily_goal_default"/>
+
+    <CheckBoxPreference
+        android:key="@string/key_pref_vacation"
+        android:title="@string/key_pref_vacation_mode"
+        android:summary="@string/vacation_mode_message"/>
+
+</PreferenceScreen>

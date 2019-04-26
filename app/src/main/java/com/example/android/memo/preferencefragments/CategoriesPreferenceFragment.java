@@ -11,6 +11,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 
 import com.example.android.memo.Activity.SettingsActivity;
@@ -24,6 +25,7 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
 
 
     @Override
+    @TargetApi(23)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -42,8 +44,7 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
                 Log.d("SettingsActivity", p.getKey() + ": " + Integer.toString(value));
 
             }
-            else if (p.getKey().equals(getString(R.string.priority_urgent))){
-
+            else if (p.getKey() ==  getString(R.string.priority_urgent)){
             }
         }
 

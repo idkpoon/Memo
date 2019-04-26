@@ -21,6 +21,7 @@ import com.example.android.memo.preferencefragments.GeneralPreferenceFragment;
 import com.example.android.memo.preferencefragments.ProductivityPreferenceFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kizitonwose.colorpreference.ColorDialog;
 
 import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -75,10 +76,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
 
+    public void onColorSelected(int i, String s) {
 
-
-
-
-
-
+    }
 }

@@ -4,10 +4,11 @@
     <PreferenceCategory
         android:title="Priority">
 
-        <Preference
+        <com.example.android.memo.dialogs.PriorityPreference
             android:title="Urgent"
             android:key="@string/priority_urgent"
             android:layout="@layout/priority_layout"
+            android:icon="@drawable/ic_flag"
             android:summary="High priority"/>
 
         <Preference
