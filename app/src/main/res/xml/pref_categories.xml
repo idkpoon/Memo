@@ -4,7 +4,7 @@
     <PreferenceCategory
         android:title="Priority">
 
-        <com.example.android.memo.dialogs.PriorityPreference
+        <Preference
             android:title="Urgent"
             android:key="@string/priority_urgent"
             android:layout="@layout/priority_layout"
@@ -28,7 +28,7 @@
     <PreferenceCategory
         android:title="Categories">
 
-        <com.kizitonwose.colorpreference.ColorPreference
+        <com.example.android.memo.colordialog.ColorPreference
             android:defaultValue="#03a9f4"
             android:key="@string/key_category_1"
             android:summary=""
@@ -38,7 +38,7 @@
             app:numColumns="5"
             app:showDialog="true" />
 
-        <com.kizitonwose.colorpreference.ColorPreference
+        <com.example.android.memo.colordialog.ColorPreference
             android:defaultValue="#009688"
             android:key="@string/key_category_2"
             android:title="Errands"
@@ -47,7 +47,7 @@
             app:numColumns="5"
             app:showDialog="true" />
 
-        <com.kizitonwose.colorpreference.ColorPreference
+        <com.example.android.memo.colordialog.ColorPreference
             android:defaultValue="#ffc107"
             android:key="@string/key_category_3"
             android:title="Personal"
@@ -56,7 +56,7 @@
             app:numColumns="5"
             app:showDialog="true" />
 
-        <com.kizitonwose.colorpreference.ColorPreference
+        <com.example.android.memo.colordialog.ColorPreference
             android:defaultValue="#e91e63"
             android:key="@string/key_category_4"
             android:title="Other"

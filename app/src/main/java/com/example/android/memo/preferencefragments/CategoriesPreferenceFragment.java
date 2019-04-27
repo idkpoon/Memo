@@ -16,12 +16,23 @@ import android.widget.ImageButton;
 
 import com.example.android.memo.Activity.SettingsActivity;
 import com.example.android.memo.R;
-import com.kizitonwose.colorpreference.ColorPreference;
-import com.kizitonwose.colorpreference.ColorDialog;
+import com.example.android.memo.colordialog.ColorDialog;
+import com.example.android.memo.colordialog.ColorPreference;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.android.memo.Activity.SettingsActivity.COLOR_PREFERENCES;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class CategoriesPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class CategoriesPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener  {
+
+    static ColorPreference preferenceCat1;
+    static ColorPreference preferenceCat2;
+    static ColorPreference preferenceCat3;
+    static ColorPreference preferenceCat4;
+
+    private static int currentPreference;
+    ColorDialog colorDialog;
+
 
 
     @Override
@@ -32,21 +43,35 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
         addPreferencesFromResource(R.xml.pref_categories);
 
         PreferenceScreen preferenceScreen = getPreferenceScreen();
-        SharedPreferences sharedPreferences = preferenceScreen.getSharedPreferences();
+        SharedPreferences sharedPreferences = getMySharedPreferences();
+
+
         int count = preferenceScreen.getPreferenceCount();
 
+        preferenceCat1 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_1));
+        preferenceCat2 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_2));
+        preferenceCat3 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_3));
+        preferenceCat4 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_4));
 
-        for(int i = 0; i < count; i++){
-            Preference p = preferenceScreen.getPreference(i);
-            if(p instanceof ColorPreference) {
+        colorDialog = ColorDialog.getColorDialog();
 
-                int value = ((ColorPreference) p).getValue();
-                Log.d("SettingsActivity", p.getKey() + ": " + Integer.toString(value));
+        String value = sharedPreferences.getString("categoryName1", "School");
+        preferenceCat1.setTitle(value);
 
-            }
-            else if (p.getKey() ==  getString(R.string.priority_urgent)){
-            }
-        }
+        value = sharedPreferences.getString("categoryName2", "Errands");
+        preferenceCat2.setTitle(value);
+
+        value = sharedPreferences.getString("categoryName3", "Personal");
+        preferenceCat3.setTitle(value);
+
+        value = sharedPreferences.getString("categoryName4", "Other");
+        preferenceCat4.setTitle(value);
+
+        preferenceCat1.setOnPreferenceClickListener(this);
+        preferenceCat2.setOnPreferenceClickListener(this);
+        preferenceCat3.setOnPreferenceClickListener(this);
+        preferenceCat4.setOnPreferenceClickListener(this);
+
 
     }
 
@@ -65,30 +90,57 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
         p.setSummary(value);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+
+    public static ColorPreference getPreferenceCat1(){
+        return preferenceCat1;
+    }
+
+    public static ColorPreference getPreferenceCat2(){
+        return preferenceCat2;
+    }
+
+    public static ColorPreference getPreferenceCat3(){
+        return preferenceCat3;
+    }
+
+    public static ColorPreference getPreferenceCat4(){
+        return preferenceCat4;
+    }
+
+
+
+    public static int getCurrentPreference(){
+
+        return currentPreference;
+    }
+
+    @TargetApi(23)
+    public SharedPreferences getMySharedPreferences(){
+        return getContext().getSharedPreferences(COLOR_PREFERENCES, MODE_PRIVATE);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
+    public boolean onPreferenceClick(Preference preference) {
+
+        switch (preference.getKey()){
+            case "category_1":
+                currentPreference = 1;
+                break;
+            case "category_2":
+                currentPreference = 2;
+                break;
+            case "category_3":
+                currentPreference = 3;
+                break;
+            case "category_4":
+                currentPreference = 4;
+                break;
 
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Preference preference = findPreference(key);
-        int colour = sharedPreferences.getInt(key, 0);
-        Log.d("SettingsActivity", key + ": " + Integer.toString(colour) + "from the onSharedPreferenceChanged method");
-        String hexColor = String.format("#%06X", (0xFFFFFF & colour));
-        Log.d("SettingsActivity", "Hex colour: " + hexColor);
+        }
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key + "_colour", hexColor);
+        Log.v(getClass().getSimpleName(), "Preference Number: " + String.valueOf(currentPreference));
+        return false;
     }
 
 

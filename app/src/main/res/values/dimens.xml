@@ -4,4 +4,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dialog_alert_default_padding">18dp</dimen>
+
+    <dimen name="color_grid_item_size">48dp</dimen>
+    <dimen name="color_grid_circle_size">36dp</dimen>
+    <dimen name="color_grid_extra_padding">32dp</dimen>
+    <dimen name="extra_padding">60dp</dimen>
 </resources>
