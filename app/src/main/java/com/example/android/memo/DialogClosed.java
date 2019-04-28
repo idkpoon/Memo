@@ -7,6 +7,7 @@ import com.example.android.memo.colordialog.ColorDialog;
  */
 
 public interface DialogClosed {
-    void onDialogClosed(ColorDialog colorDialog, String TAG);
+    void onPositiveButton(ColorDialog colorDialog, String TAG);
+    void onNegativeButton(ColorDialog colorDialog, String TAG);
 
 }

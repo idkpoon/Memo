@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -118,7 +117,7 @@ public class ColorDialog extends DialogFragment implements DialogInterface.OnCli
             colorGrid.setColumnCount(numColumns);
             etName = rootView.findViewById(R.id.editTextName);
             repopulateItems();
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("ColorPreferences", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences(SettingsActivity.COLOR_PREFERENCES, Context.MODE_PRIVATE);
 
             etName.setText(sharedPreferences.getString("categoryName", ""));
 
@@ -175,25 +174,6 @@ public class ColorDialog extends DialogFragment implements DialogInterface.OnCli
             Log.v(getClass().getSimpleName(), "Color: "+ colorChoices[i] + " (int): " + colorArray[i]);
         }
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(COLOR_PREFERENCES, Context.MODE_PRIVATE);
-
-        int savedColor = 0;
-        if(CategoriesPreferenceFragment.getCurrentPreference() == 1) {
-            savedColor = sharedPreferences.getInt("selectedColor1", 12597547);
-        }
-        else if(CategoriesPreferenceFragment.getCurrentPreference() == 2){
-            savedColor = sharedPreferences.getInt("selectedColor2", 12597547);
-        }
-        else if(CategoriesPreferenceFragment.getCurrentPreference() == 3){
-            savedColor = sharedPreferences.getInt("selectedColor3", 12597547);
-        }
-        else if(CategoriesPreferenceFragment.getCurrentPreference() == 4){
-            savedColor = sharedPreferences.getInt("selectedColor4", 12597547);
-        }
-
-        Log.v(getClass().getSimpleName(), "Selected Color: " + String.valueOf(savedColor));
-
-
 
         for (int i = 0; i<colorChoices.length; i++) {
             final int color = colorArray[i]; // Non negative number
@@ -202,17 +182,20 @@ public class ColorDialog extends DialogFragment implements DialogInterface.OnCli
                     .inflate(R.layout.grid_item_color, colorGrid, false);
             boolean selected = false;
 
-            if(color == savedColor){
+            SharedPreferences sharedPreferences = context.getSharedPreferences(SettingsActivity.COLOR_PREFERENCES, Context.MODE_PRIVATE);
+
+            int savedColor = sharedPreferences.getInt("selectedColor" + String.valueOf(CategoriesPreferenceFragment.getCurrentPreference()), 12597547);
+            Log.v(getClass().getSimpleName(), "Saved color: " + savedColor);
+            Log.v(getClass().getSimpleName(), "Color: " + color);
+
+            if(savedColor == color){
                 selected = true;
-                Log.v(getClass().getSimpleName(), "Same colour " + String.valueOf(color));
+                Log.v(getClass().getSimpleName(), "Same");
             }
-            else{
-                Log.v(getClass().getSimpleName(), "Different colour " + String.valueOf(color));
+            else {
                 selected = false;
             }
-
-            final int colorInt = colorChoices[i];
-            ColorUtils.setColorViewValue((ImageView) itemView.findViewById(R.id.color_view), colorInt,
+            ColorPreference.setColorViewValue((ImageView) itemView.findViewById(R.id.color_view), color,
                     selected, colorShape, context);
 
 
@@ -276,10 +259,11 @@ public class ColorDialog extends DialogFragment implements DialogInterface.OnCli
             switch(which){
                 case -2:
                     // Negative
+                    dialogClosedListener.onNegativeButton(colorDialog, "pref");
                     break;
                 case -1:
                     // Positive
-                    dialogClosedListener.onDialogClosed(colorDialog, "pref");
+                    dialogClosedListener.onPositiveButton(colorDialog, "pref");
                     break;
             }
         }

@@ -76,7 +76,7 @@ public class PasswordPreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         String TAG = "SettingsActivity";
-        Log.d(TAG, "onDialogClosed is called");
+        Log.d(TAG, "onPositiveButton is called");
 
         if(positiveResult){
             Log.d(TAG, "positive result");

@@ -25,11 +25,11 @@ import static com.example.android.memo.Activity.SettingsActivity.COLOR_PREFERENC
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CategoriesPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener  {
 
-    static ColorPreference preferenceCat1;
-    static ColorPreference preferenceCat2;
-    static ColorPreference preferenceCat3;
-    static ColorPreference preferenceCat4;
+    //Categories
+    static ColorPreference preferenceCat1, preferenceCat2, preferenceCat3, preferenceCat4;
 
+    //Priority
+    static ColorPreference priority1, priority2, priority3;
     private static int currentPreference;
     ColorDialog colorDialog;
 
@@ -53,6 +53,11 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
         preferenceCat3 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_3));
         preferenceCat4 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_category_4));
 
+        priority1 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_priority_1));
+        priority2 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_priority_2));
+        priority3 = (ColorPreference) preferenceScreen.findPreference(getString(R.string.key_priority_3));
+
+
         colorDialog = ColorDialog.getColorDialog();
 
         String value = sharedPreferences.getString("categoryName1", "School");
@@ -67,10 +72,22 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
         value = sharedPreferences.getString("categoryName4", "Other");
         preferenceCat4.setTitle(value);
 
+        value = sharedPreferences.getString("priorityName1", "Urgent");
+        priority1.setTitle(value);
+        value = sharedPreferences.getString("priorityName2", "Do later");
+        priority2.setTitle(value);
+        value = sharedPreferences.getString("priorityName3", "When you have time");
+        priority3.setTitle(value);
+
+
         preferenceCat1.setOnPreferenceClickListener(this);
         preferenceCat2.setOnPreferenceClickListener(this);
         preferenceCat3.setOnPreferenceClickListener(this);
         preferenceCat4.setOnPreferenceClickListener(this);
+
+        priority1.setOnPreferenceClickListener(this);
+        priority2.setOnPreferenceClickListener(this);
+        priority3.setOnPreferenceClickListener(this);
 
 
     }
@@ -107,6 +124,18 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
         return preferenceCat4;
     }
 
+    public static ColorPreference getPriority1() {
+        return priority1;
+    }
+
+    public static ColorPreference getPriority2() {
+        return priority2;
+    }
+
+    public static ColorPreference getPriority3() {
+        return priority3;
+    }
+
 
 
     public static int getCurrentPreference(){
@@ -134,6 +163,15 @@ public class CategoriesPreferenceFragment extends PreferenceFragment implements 
                 break;
             case "category_4":
                 currentPreference = 4;
+                break;
+            case "priority_1":
+                currentPreference = 5;
+                break;
+            case "priority_2":
+                currentPreference = 6;
+                break;
+            case "priority_3":
+                currentPreference = 7;
                 break;
 
 

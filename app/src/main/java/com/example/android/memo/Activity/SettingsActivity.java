@@ -3,15 +3,13 @@ package com.example.android.memo.Activity;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -31,9 +29,10 @@ import com.example.android.memo.preferencefragments.CategoriesPreferenceFragment
 import com.example.android.memo.preferencefragments.GeneralPreferenceFragment;
 import com.example.android.memo.preferencefragments.ProductivityPreferenceFragment;
 import com.example.android.memo.colordialog.ColorDialog;
-
 import java.util.List;
-public class SettingsActivity extends AppCompatPreferenceActivity implements ColorDialog.OnColorSelectedListener, DialogClosed{
+
+public class SettingsActivity extends AppCompatPreferenceActivity implements
+        ColorDialog.OnColorSelectedListener, DialogClosed{
 
     public static final String COLOR_PREFERENCES = "ColorPreferences";
     private static Context context;
@@ -119,10 +118,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Col
             editor.putInt("selectedColor4", regularColor);
 
         }
+        else if(preference == 5){
+            editor.putInt("selectedColor5", regularColor);
+        }
+        else if(preference == 6){
+            editor.putInt("selectedColor6", regularColor);
+
+        }
+        else if(preference == 7){
+            editor.putInt("selectedColor7", regularColor);
+        }
         editor.commit();
 
         ColorDialog dialog = ColorDialog.getColorDialog();
-
         Log.v(TAG, "Color Int: " + String.valueOf(regularColor));
         dialog.repopulateItems();
 
@@ -131,69 +139,115 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Col
 
 
     @Override
-    public void onDialogClosed(ColorDialog colorDialog, String TAG) {
+    public void onPositiveButton(ColorDialog colorDialog, String TAG) {
         String value = colorDialog.getName().trim();
         int color = 0;
         ColorPreference colorPreference = null;
-        if(value.isEmpty() == false){
+        SharedPreferences.Editor editor = getMySharedPreferences().edit();
+        int preference = CategoriesPreferenceFragment.getCurrentPreference();
 
-            SharedPreferences.Editor editor = getMySharedPreferences().edit();
-            int preference = CategoriesPreferenceFragment.getCurrentPreference();
+        if(value.isEmpty() == false){
 
             switch (preference) {
                 case 1:
                     editor.putString("categoryName1", value);
                     color = getMySharedPreferences().getInt("selectedColor1", 12597547);
+                    editor.putInt("savedColor1", color);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat1();
                     break;
                 case 2:
                     editor.putString("categoryName2", value);
                     color = getMySharedPreferences().getInt("selectedColor2", 12597547);
+                    editor.putInt("savedColor2", color);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat2();
                     break;
                 case 3:
                     editor.putString("categoryName3", value);
                     color = getMySharedPreferences().getInt("selectedColor3", 12597547);
+                    editor.putInt("savedColor3", color);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat3();
                     break;
                 case 4:
                     editor.putString("categoryName4", value);
                     color = getMySharedPreferences().getInt("selectedColor4", 12597547);
+                    editor.putInt("savedColor4", color);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat4();
                     break;
+                case 5:
+                    editor.putString("categoryName5", value);
+                    color = getMySharedPreferences().getInt("selectedColor6", 12597547);
+                    editor.putInt("savedColor5", color);
+                    colorPreference = CategoriesPreferenceFragment.getPriority1();
+                    break;
+                case 6:
+                    editor.putString("categoryName6", value);
+                    color = getMySharedPreferences().getInt("selectedColor6", 15105570);
+                    editor.putInt("savedColor6", color);
+                    colorPreference = CategoriesPreferenceFragment.getPriority2();
+                    break;
+                case 7:
+                    editor.putString("categoryName7", value);
+                    color = getMySharedPreferences().getInt("selectedColor7", 16761095);
+                    editor.putInt("savedColor7", color);
+                    colorPreference = CategoriesPreferenceFragment.getPriority3();
+                    break;
             }
+
             editor.commit();
             ImageView colorView = ColorPreference.getImageView();
             ColorUtils.setColorViewValue(colorView, color, false, ColorShape.CIRCLE, this);
         }
         else{
-            int preference = CategoriesPreferenceFragment.getCurrentPreference();
             switch (preference) {
                 case 1:
                     color = getMySharedPreferences().getInt("selectedColor1", 12597547);
-                    value = getMySharedPreferences().getString("categoryName1", "");
+                    value = getMySharedPreferences().getString("categoryName1", "School");
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat1();
+                    editor.putInt("savedColor1", color);
                     break;
                 case 2:
                     color = getMySharedPreferences().getInt("selectedColor2", 12597547);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat2();
-                    value = getMySharedPreferences().getString("categoryName2", "");
+                    value = getMySharedPreferences().getString("categoryName2", "Errands");
+                    editor.putInt("savedColor2", color);
                     break;
                 case 3:
                     color = getMySharedPreferences().getInt("selectedColor3", 12597547);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat3();
-                    value = getMySharedPreferences().getString("categoryName3", "");
+                    value = getMySharedPreferences().getString("categoryName3", "Personal");
+                    editor.putInt("savedColor3", color);
                     break;
                 case 4:
                     color = getMySharedPreferences().getInt("selectedColor4", 12597547);
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat4();
-                    value = getMySharedPreferences().getString("categoryName4", "");
+                    value = getMySharedPreferences().getString("categoryName4", "Other");
+                    editor.putInt("savedColor4", color);
+                    break;
+                case 5:
+                    color = getMySharedPreferences().getInt("selectedColor5", 12597547);
+                    colorPreference = CategoriesPreferenceFragment.getPriority1();
+                    value = getMySharedPreferences().getString("categoryName5", "Urgent");
+                    editor.putInt("savedColor5", color);
+                    break;
+                case 6:
+                    color = getMySharedPreferences().getInt("selectedColor6", 15105570);
+                    colorPreference = CategoriesPreferenceFragment.getPriority2();
+                    value = getMySharedPreferences().getString("categoryName6", "Do later");
+                    editor.putInt("savedColor6", color);
+                    break;
+                case 7:
+                    color = getMySharedPreferences().getInt("selectedColor7", 16761095);
+                    colorPreference = CategoriesPreferenceFragment.getPriority3();
+                    value = getMySharedPreferences().getString("categoryName7", "When you have time");
+                    editor.putInt("savedColor7", color);
                     break;
             }
 
 
         }
+
         ImageView colorView = ColorPreference.getImageView();
+
         Drawable drawable = setColorViewValue(colorView, color, ColorShape.CIRCLE, this);
         colorView.setImageDrawable(drawable);
         Log.v(getClass().getSimpleName(), "My Colour: " + String.valueOf(color));
@@ -203,8 +257,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements Col
 
     }
 
+    @Override
+    public void onNegativeButton(ColorDialog colorDialog, String TAG) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(COLOR_PREFERENCES, MODE_PRIVATE);
+        Editor editor = sharedPreferences.edit();
+        int savedColor = sharedPreferences.getInt("savedColor" + String.valueOf(CategoriesPreferenceFragment.getCurrentPreference()), 12597547 );
+        editor.putInt("selectedColor" + String.valueOf(CategoriesPreferenceFragment.getCurrentPreference()), savedColor);
+        editor.commit();
+
+    }
+
     public static Drawable setColorViewValue(ImageView imageView, int color, ColorShape shape, Context context) {
-        Resources res = imageView.getContext().getResources();
+        Resources res = getMyContext().getResources();
         Drawable currentDrawable = imageView.getDrawable();
 
         GradientDrawable colorChoiceDrawable = new GradientDrawable();

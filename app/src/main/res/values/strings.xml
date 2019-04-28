@@ -135,7 +135,10 @@
     <string name="key_pref_vacation">vacation</string>
     <string name="key_pref_vacation_mode">Vacation mode</string>
     <string name="vacation_mode_message">When you\'re on vacation mode, you\'re daily goal reminder will be switched off</string>
-    <string name="priority_urgent">priority_urgent</string>
+
+    <string name="key_priority_1">priority_1</string>
+    <string name="key_priority_2">priority_2</string>
+    <string name="key_priority_3">priority_3</string>
 
 
 </resources>

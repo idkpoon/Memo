@@ -36,7 +36,7 @@ import com.example.android.memo.preferencefragments.CategoriesPreferenceFragment
  * Created by 21poonkw1 on 26/4/2019.
  */
 
-public class ColorPreference extends Preference implements ColorDialog.OnColorSelectedListener, DialogClosed {
+public class ColorPreference extends Preference implements ColorDialog.OnColorSelectedListener {
     private int[] colorChoices = {};
     private int value = 0;
     private int itemLayoutId = R.layout.pref_color_layout;
@@ -47,6 +47,7 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
 
     ColorDialog colorDialog;
     static ImageView CP1, CP2, CP3, CP4;
+    static ImageView CP5, CP6, CP7;
 
 
     private static ImageView colorView;
@@ -121,13 +122,20 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
             color = sharedPreferences.getInt("selectedColor4", 12597547);
             setColorViewValue(colorView, color, false, ColorShape.CIRCLE, getContext());
         }
-
-
-            if (colorView != null) {
-            setColorViewValue(colorView, color, true, ColorShape.CIRCLE, getContext());
-
-        } else {
-            Log.v(getClass().getSimpleName(), "Color view is null");
+        else if(getKey().equals("priority_1")){
+            CP5 = colorView;
+            color = sharedPreferences.getInt("selectedColor5", 12597547);
+            setColorViewValue(colorView, color, false, ColorShape.CIRCLE, getContext());
+        }
+        else if(getKey().equals("priority_2")){
+            CP6 = colorView;
+            color = sharedPreferences.getInt("selectedColor6", 12597547);
+            setColorViewValue(colorView, color, false, ColorShape.CIRCLE, getContext());
+        }
+        else if(getKey().equals("priority_3")){
+            CP7 = colorView;
+            color = sharedPreferences.getInt("selectedColor7", 12597547);
+            setColorViewValue(colorView, color, false, ColorShape.CIRCLE, getContext());
         }
     }
 
@@ -145,6 +153,15 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
         else if(CategoriesPreferenceFragment.getCurrentPreference() == 4){
             iv = CP4;
         }
+        else if(CategoriesPreferenceFragment.getCurrentPreference() == 5){
+            iv = CP5;
+        }
+        else if(CategoriesPreferenceFragment.getCurrentPreference() == 6){
+            iv = CP6;
+        }
+        else if(CategoriesPreferenceFragment.getCurrentPreference() == 7){
+            iv = CP7;
+        }
         return iv;
 
 
@@ -152,7 +169,8 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
 
     public static void setColorViewValue(ImageView imageView, int color, boolean selected, ColorShape shape, Context context) {
         Resources res = imageView.getContext().getResources();
-        Log.v("CustomColorPreference", "Colour from colour view value: " + String.valueOf(color));
+        Log.v("olorPreference", "Colour from colour view value: " + String.valueOf(color));
+        Log.v("ColorPreference", selected == true ? "The colour is selected" : "The colour is not selected");
 
         Drawable currentDrawable = imageView.getDrawable();
 
@@ -178,6 +196,9 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
                 TypedValue.COMPLEX_UNIT_DIP, 2, res.getDisplayMetrics()), darkenedColor);
 
         Drawable drawable = colorChoiceDrawable;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SettingsActivity.COLOR_PREFERENCES, Context.MODE_PRIVATE);
+        int savedColor = sharedPreferences.getInt("savedColor" + String.valueOf(CategoriesPreferenceFragment.getCurrentPreference()), 0);
         if (selected) {
             VectorDrawable vectorCheck = (VectorDrawable) res.getDrawable(isColorDark(color)
                     ? R.drawable.ic_check_white
@@ -191,7 +212,7 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
                     bitmapDrawable});
         }
 
-        imageView.setImageDrawable(colorChoiceDrawable);
+        imageView.setImageDrawable(drawable);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -273,71 +294,4 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
 
     }
 
-    @Override
-    public void onDialogClosed(ColorDialog colorDialog, String TAG) {
-        String value = colorDialog.getName().trim();
-        int color = 0;
-        ColorPreference colorPreference = null;
-        if(value.isEmpty() == false){
-
-            SharedPreferences.Editor editor = getMySharedPreferences().edit();
-            int preference = CategoriesPreferenceFragment.getCurrentPreference();
-
-            switch (preference) {
-                case 1:
-                    editor.putString("categoryName1", value);
-                    color = getMySharedPreferences().getInt("selectedColor1", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat1();
-                    break;
-                case 2:
-                    editor.putString("categoryName2", value);
-                    color = getMySharedPreferences().getInt("selectedColor2", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat2();
-                    break;
-                case 3:
-                    editor.putString("categoryName3", value);
-                    color = getMySharedPreferences().getInt("selectedColor3", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat3();
-                    break;
-                case 4:
-                    editor.putString("categoryName4", value);
-                    color = getMySharedPreferences().getInt("selectedColor4", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat4();
-                    break;
-            }
-            editor.commit();
-        }
-        else{
-            int preference = CategoriesPreferenceFragment.getCurrentPreference();
-            switch (preference) {
-                case 1:
-                    color = getMySharedPreferences().getInt("selectedColor1", 12597547);
-                    value = getMySharedPreferences().getString("categoryName1", "");
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat1();
-                    break;
-                case 2:
-                    color = getMySharedPreferences().getInt("selectedColor2", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat2();
-                    value = getMySharedPreferences().getString("categoryName2", "");
-                    break;
-                case 3:
-                    color = getMySharedPreferences().getInt("selectedColor3", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat3();
-                    value = getMySharedPreferences().getString("categoryName3", "");
-                    break;
-                case 4:
-                    color = getMySharedPreferences().getInt("selectedColor4", 12597547);
-                    colorPreference = CategoriesPreferenceFragment.getPreferenceCat4();
-                    value = getMySharedPreferences().getString("categoryName4", "");
-                    break;
-            }
-        }
-
-        Log.v(getClass().getSimpleName(), "My Colour: " + String.valueOf(color));
-        colorPreference.setTitle(value);
-
-        ImageView colorView = ColorPreference.getImageView();
-        ColorPreference.setColorViewValue(colorView, color, false, ColorShape.CIRCLE, getContext());
-
-    }
 }
