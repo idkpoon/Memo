@@ -58,46 +58,9 @@ public class AddTodoActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if (id == R.id.item_add_todo) {
-            insertTask();
-            return true;
 
-            // add a task
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    private void insertTask(){
-
-        TodoDBHelper mDBHelper = new TodoDBHelper(this);
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
-
-        String  name = etTaskName.getText().toString().trim();
-        String dueDate = "January 25th 2018";
-        String priority = "no. 1";
-        String category = "School";
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TodoEntry.COLUMN_TODO_NAME, name);
-        contentValues.put(TodoEntry.COLUMN_TODO_DUE, dueDate);
-        contentValues.put(TodoEntry.COLUMN_TODO_CATEGORY, category);
-        contentValues.put(TodoEntry.COLUMN_TODO_PRIORITY, priority);
-
-        long newRowId = db.insert(TodoEntry.TABLE_NAME, null, contentValues);
-
-        if (newRowId == -1){
-            Toast.makeText(this, "Error with saving task", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "Task Saved!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddTodoActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-    }
 
 
 

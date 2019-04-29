@@ -46,7 +46,10 @@ public class InboxFragment extends Fragment {
 
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
 
-        String[] projection = {TodoEntry._ID, TodoEntry.COLUMN_TODO_NAME, TodoEntry.COLUMN_TODO_DUE,
+        String[] projection = {
+                TodoEntry._ID, TodoEntry.COLUMN_TODO_NAME,
+                TodoEntry.COLUMN_TODO_TIME,
+                TodoEntry.COLUMN_TODO_DATE,
                 TodoEntry.COLUMN_TODO_CATEGORY,
                 TodoEntry.COLUMN_TODO_PRIORITY};
 
@@ -59,7 +62,8 @@ public class InboxFragment extends Fragment {
 
             displayView.append(TodoEntry._ID
                             + " - " + TodoEntry.COLUMN_TODO_NAME
-                    + " - " + TodoEntry.COLUMN_TODO_DUE
+                    + " - " + TodoEntry.COLUMN_TODO_DATE
+                    + " - " + TodoEntry.COLUMN_TODO_TIME
                     + " - " + TodoEntry.COLUMN_TODO_PRIORITY
                     + " - " + TodoEntry.COLUMN_TODO_CATEGORY
                     + "\n");
@@ -67,7 +71,8 @@ public class InboxFragment extends Fragment {
             int idColumnIndex = cursor.getColumnIndex(TodoEntry._ID);
             int nameColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_NAME);
             int priorityColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_PRIORITY);
-            int dueDateColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_DUE);
+            int dueDateColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_DATE);
+            int timeColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_TIME);
             int categoryColumnIndex = cursor.getColumnIndex(TodoEntry.COLUMN_TODO_CATEGORY);
 
             while(cursor.moveToNext()){
@@ -76,12 +81,14 @@ public class InboxFragment extends Fragment {
                 String currentDueDate = cursor.getString(dueDateColumnIndex);
                 String currentPriority = cursor.getString(priorityColumnIndex);
                 String currentCategory = cursor.getString(categoryColumnIndex);
+                String currentTime = cursor.getString(timeColumnIndex);
 
                 displayView.append("\n" + currentID
                         + " - " + currentName
-                        + " - " + priorityColumnIndex
-                        + " - " + dueDateColumnIndex
-                        + " - " + categoryColumnIndex);
+                        + " - " + currentDueDate
+                        + " - " + currentTime
+                        + " - " + currentPriority
+                        + " - " + currentCategory);
             }
         } finally{
             cursor.close();

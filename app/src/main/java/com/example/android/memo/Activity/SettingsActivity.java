@@ -174,19 +174,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
                     colorPreference = CategoriesPreferenceFragment.getPreferenceCat4();
                     break;
                 case 5:
-                    editor.putString("categoryName5", value);
+                    editor.putString("priorityName1", value);
                     color = getMySharedPreferences().getInt("selectedColor6", 12597547);
                     editor.putInt("savedColor5", color);
                     colorPreference = CategoriesPreferenceFragment.getPriority1();
                     break;
                 case 6:
-                    editor.putString("categoryName6", value);
+                    editor.putString("priorityName2", value);
                     color = getMySharedPreferences().getInt("selectedColor6", 15105570);
                     editor.putInt("savedColor6", color);
                     colorPreference = CategoriesPreferenceFragment.getPriority2();
                     break;
                 case 7:
-                    editor.putString("categoryName7", value);
+                    editor.putString("priorityName3", value);
                     color = getMySharedPreferences().getInt("selectedColor7", 16761095);
                     editor.putInt("savedColor7", color);
                     colorPreference = CategoriesPreferenceFragment.getPriority3();
@@ -226,19 +226,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
                 case 5:
                     color = getMySharedPreferences().getInt("selectedColor5", 12597547);
                     colorPreference = CategoriesPreferenceFragment.getPriority1();
-                    value = getMySharedPreferences().getString("categoryName5", "Urgent");
+                    value = getMySharedPreferences().getString("priorityName1", "Urgent");
                     editor.putInt("savedColor5", color);
                     break;
                 case 6:
                     color = getMySharedPreferences().getInt("selectedColor6", 15105570);
                     colorPreference = CategoriesPreferenceFragment.getPriority2();
-                    value = getMySharedPreferences().getString("categoryName6", "Do later");
+                    value = getMySharedPreferences().getString("priorityName2", "Do later");
                     editor.putInt("savedColor6", color);
                     break;
                 case 7:
                     color = getMySharedPreferences().getInt("selectedColor7", 16761095);
                     colorPreference = CategoriesPreferenceFragment.getPriority3();
-                    value = getMySharedPreferences().getString("categoryName7", "When you have time");
+                    value = getMySharedPreferences().getString("priorityName3", "When you have time");
                     editor.putInt("savedColor7", color);
                     break;
             }

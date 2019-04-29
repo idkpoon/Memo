@@ -15,7 +15,8 @@ public class TodoContract {
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_TODO_NAME = "name";
-        public final static String COLUMN_TODO_DUE = "schedule";
+        public final static String COLUMN_TODO_TIME = "time";
+        public final static String COLUMN_TODO_DATE = "date";
         public final static String COLUMN_TODO_CATEGORY = "category";
         public final static String COLUMN_TODO_PRIORITY = "priority";
 

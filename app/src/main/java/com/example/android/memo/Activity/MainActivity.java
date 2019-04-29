@@ -1,6 +1,9 @@
 package com.example.android.memo.Activity;
 
 import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
+import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -18,9 +21,13 @@ import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.android.memo.CustomTypefaceSpan;
+import com.example.android.memo.dialogs.FullScreenDialog;
 import com.example.android.memo.fragments.InboxFragment;
 import com.example.android.memo.fragments.ListFragment;
 import com.example.android.memo.R;
@@ -28,7 +35,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
     private android.support.v7.widget.Toolbar mToolbar;
     private DrawerLayout drawerLayout;
     public Typeface futuraFont;
@@ -84,8 +92,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addTodoActivity = new Intent(MainActivity.this, AddTodoActivity.class);
-                startActivity(addTodoActivity);
+                FullScreenDialog dialog = new FullScreenDialog();
+                android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "FullScreenDialog");
             }
         });
 
@@ -186,9 +195,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mi.setTitle(mNewTitle);
     }
 
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        Button button = FullScreenDialog.btnOpenTimePicker;
+        button.setText(hourOfDay + ":" + minute + String.valueOf(hourOfDay < 12 ? " AM" : " PM"));
+    }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Button button = FullScreenDialog.btnOpenDatePicker;
+        button.setText(dayOfMonth + "/" + month + "/" + year);
     }
 }
