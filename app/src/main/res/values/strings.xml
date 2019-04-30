@@ -27,8 +27,8 @@
     <string name="add_todo">Add Todo</string>
     <string name="add">Add</string>
     <string name="number_of_rows">Number of rows:</string>
-    <string name="pick_date">Pick date</string>
-    <string name="pick_time">Pick time</string>
+    <string name="pick_date">No due date chosen</string>
+    <string name="pick_time">No time chosen</string>
 
     <string name="key_pref_general" translatable="false">general</string>
     <string name="key_pref_categories" translatable="false">categories</string>

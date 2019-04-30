@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -102,6 +103,7 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
             case R.id.btnTimePicker:
                 DialogFragment time = new TimePicker();
                 time.show(getChildFragmentManager(), "Time picker");
+
                 break;
             case R.id.btnDatePicker:
                 DialogFragment date = new DatePicker();
@@ -122,10 +124,20 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         priorityOptions.add(sharedPreferences.getString("priorityName2", "Do later"));
         priorityOptions.add(sharedPreferences.getString("priorityName3", "When you have time"));
 
+        ArrayList<String> categoryOptions = new ArrayList<>();
+        categoryOptions.add(sharedPreferences.getString("categoryName1", "School"));
+        categoryOptions.add(sharedPreferences.getString("categoryName2", "Errands"));
+        categoryOptions.add(sharedPreferences.getString("categoryName3", "Personal"));
+        categoryOptions.add(sharedPreferences.getString("categoryName4", "Other"));
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,priorityOptions);
         prioritySpinner.setAdapter(adapter);
         prioritySpinner.setSelection(0);
 
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,categoryOptions);
+        categorySpinner.setAdapter(adapter);
+        categorySpinner.setSelection(0);
     }
 
 
@@ -138,8 +150,8 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         String  name = etTaskName.getText().toString().trim();
         String dueDate = btnOpenDatePicker.getText().toString();
         String time = btnOpenTimePicker.getText().toString();
-        String priority = prioritySpinner.getSelectedItem().toString();
-        String category = categorySpinner.getSelectedItem().toString();
+        String priority = String.valueOf(prioritySpinner.getSelectedItemPosition()+1);
+        String category = String.valueOf(categorySpinner.getSelectedItemPosition()+1);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TodoEntry.COLUMN_TODO_NAME, name);
@@ -148,14 +160,13 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         contentValues.put(TodoEntry.COLUMN_TODO_CATEGORY, category);
         contentValues.put(TodoEntry.COLUMN_TODO_PRIORITY, priority);
 
-        long newRowId = db.insert(TodoEntry.TABLE_NAME, null, contentValues);
+        Uri newUri = getContext().getContentResolver().insert(TodoEntry.CONTENT_URI, contentValues);
 
-        if (newRowId == -1){
-            Toast.makeText(getContext(), "Error with saving task", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(getContext(), "Task Saved!", Toast.LENGTH_SHORT).show();
-            dismiss();
+        if (newUri == null) {
+            Toast.makeText(getContext(), "Insert task Failed", Toast.LENGTH_SHORT).show();
+        } else {
+
+            Toast.makeText(getContext(), "Insert task Success", Toast.LENGTH_SHORT).show();
         }
 
 

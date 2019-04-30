@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +32,7 @@ import com.example.android.memo.CustomTypefaceSpan;
 import com.example.android.memo.dialogs.FullScreenDialog;
 import com.example.android.memo.fragments.InboxFragment;
 import com.example.android.memo.fragments.ListFragment;
+import com.example.android.memo.database.TodoContract.TodoEntry;
 import com.example.android.memo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mTitle;
     private NavigationView navigationView;
     private FloatingActionButton fabAdd;
+
+    static ContentResolver contentResolver;
 
     String lastVisitedFragment = "Inbox";
 
@@ -58,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        contentResolver = getContentResolver();
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -198,7 +205,26 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Button button = FullScreenDialog.btnOpenTimePicker;
-        button.setText(hourOfDay + ":" + minute + String.valueOf(hourOfDay < 12 ? " AM" : " PM"));
+
+        String hour = "";
+        if(hourOfDay > 12){
+            if(hourOfDay < 10) {
+                hour = String.valueOf("0".concat(String.valueOf(hourOfDay - 12)) );
+            }
+            else{
+                hour = String.valueOf(hourOfDay - 12);
+            }
+        }
+        else{
+            if(hourOfDay < 10) {
+                hour = String.valueOf("0".concat(String.valueOf(hourOfDay)) );
+            }
+            else{
+                hour = String.valueOf(hourOfDay);
+            }
+        }
+
+        button.setText(hour + ":" + minute + String.valueOf(hourOfDay < 12 ? " AM" : " PM"));
     }
 
     @Override
@@ -206,4 +232,6 @@ public class MainActivity extends AppCompatActivity implements
         Button button = FullScreenDialog.btnOpenDatePicker;
         button.setText(dayOfMonth + "/" + month + "/" + year);
     }
+
+
 }
