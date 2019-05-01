@@ -193,9 +193,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
                     break;
             }
 
-            editor.commit();
-            ImageView colorView = ColorPreference.getImageView();
-            ColorUtils.setColorViewValue(colorView, color, false, ColorShape.CIRCLE, this);
         }
         else{
             switch (preference) {
@@ -244,12 +241,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
             }
 
 
+
         }
+        editor.commit();
+
 
         ImageView colorView = ColorPreference.getImageView();
 
         Drawable drawable = setColorViewValue(colorView, color, ColorShape.CIRCLE, this);
         colorView.setImageDrawable(drawable);
+
         Log.v(getClass().getSimpleName(), "My Colour: " + String.valueOf(color));
         colorPreference.setTitle(value);
 

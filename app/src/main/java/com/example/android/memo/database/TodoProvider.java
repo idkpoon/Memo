@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import com.example.android.memo.database.TodoContract.TodoEntry;
 
 /**
@@ -27,8 +28,8 @@ public class TodoProvider extends ContentProvider {
 
     static {
 
-        sUriMatcher.addURI(TodoContract.CONTENT_AUTHORITY, TodoContract.PATH_PETS, TODOS);
-        sUriMatcher.addURI(TodoContract.CONTENT_AUTHORITY, TodoContract.PATH_PETS + "/#", TODOS_ID);
+        sUriMatcher.addURI(TodoContract.CONTENT_AUTHORITY, TodoContract.PATH_TODOS, TODOS);
+        sUriMatcher.addURI(TodoContract.CONTENT_AUTHORITY, TodoContract.PATH_TODOS + "/#", TODOS_ID);
 
 
     }
@@ -81,106 +82,88 @@ public class TodoProvider extends ContentProvider {
         }
     }
 
-    // TEMPORARY
-
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch(match){
+            case TODOS:
+                return insertTodo(uri, values);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case TODOS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(TodoEntry.TABLE_NAME, selection, selectionArgs);
+            case TODOS_ID:
+                // Delete a single row given by the ID in the URI
+                selection = TodoEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(TodoEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case TODOS:
+                return updateTodo(uri, values, selection, selectionArgs);
+            case TODOS_ID:
+                // For the PET_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = TodoEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updateTodo(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+
     }
 
-//    @Nullable
-//    @Override
-//    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-//        final int match = sUriMatcher.match(uri);
-//        switch(match){
-//            case TODOS:
-//                return insertTodo(uri, values);
-//            default:
-//                throw new IllegalArgumentException("Insertion is not supported for " + uri);
-//        }
-//    }
-//
-//    @Override
-//    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-//        SQLiteDatabase database = mDBHelper.getWritableDatabase();
-//
-//        final int match = sUriMatcher.match(uri);
-//        switch (match) {
-//            case TODOS:
-//                // Delete all rows that match the selection and selection args
-//                return database.delete(TodoEntry.TABLE_NAME, selection, selectionArgs);
-//            case TODOS_ID:
-//                // Delete a single row given by the ID in the URI
-//                selection = TodoEntry._ID + "=?";
-//                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-//                return database.delete(TodoEntry.TABLE_NAME, selection, selectionArgs);
-//            default:
-//                throw new IllegalArgumentException("Deletion is not supported for " + uri);
-//        }
-//    }
-//
-//    @Override
-//    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-//        final int match = sUriMatcher.match(uri);
-//        switch (match) {
-//            case TODOS:
-//                return updateTodo(uri, values, selection, selectionArgs);
-//            case TODOS_ID:
-//                // For the PET_ID code, extract out the ID from the URI,
-//                // so we know which row to update. Selection will be "_id=?" and selection
-//                // arguments will be a String array containing the actual ID.
-//                selection = TodoEntry._ID + "=?";
-//                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-//                return updateTodo(uri, values, selection, selectionArgs);
-//            default:
-//                throw new IllegalArgumentException("Update is not supported for " + uri);
-//        }
-//
-//    }
-//
-//    private Uri insertTodo(Uri uri, ContentValues values) {
-//
-//        SQLiteDatabase database = mDBHelper.getWritableDatabase();
-//
-//        String name = values.getAsString(TodoEntry.COLUMN_TODO_NAME);
-//        if (name == null) {
-//            throw new IllegalArgumentException("Todo requires a name");
-//        }
-//        long id = database.insert(TodoEntry.TABLE_NAME, null, values);
-//        if (id == -1) {
-//            Log.e(LOG_TAG, "Failed to insert row for " + uri);
-//            return null;
-//        }
-//
-//        return ContentUris.withAppendedId(uri, id);
-//    }
-//
-//    private int updateTodo(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-//
-//        if (values.containsKey(TodoEntry.COLUMN_TODO_NAME)) {
-//            String name = values.getAsString(TodoEntry.COLUMN_TODO_NAME);
-//            if (name == null) {
-//                throw new IllegalArgumentException("Todo requires a name");
-//            }
-//        }
-//
-//        if (values.size() == 0) {
-//            return 0;
-//        }
-//
-//        SQLiteDatabase database = mDBHelper.getWritableDatabase();
-//        return database.update(TodoEntry.TABLE_NAME, values, selection, selectionArgs);
-//
-//    }
+    private Uri insertTodo(Uri uri, ContentValues values) {
+
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+
+        String name = values.getAsString(TodoEntry.COLUMN_TODO_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Todo requires a name");
+        }
+        long id = database.insert(TodoEntry.TABLE_NAME, null, values);
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        return ContentUris.withAppendedId(uri, id);
+    }
+
+    private int updateTodo(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        if (values.containsKey(TodoEntry.COLUMN_TODO_NAME)) {
+            String name = values.getAsString(TodoEntry.COLUMN_TODO_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Todo requires a name");
+            }
+        }
+
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+        return database.update(TodoEntry.TABLE_NAME, values, selection, selectionArgs);
+
+    }
 }

@@ -3,9 +3,11 @@ package com.example.android.memo.Activity;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.app.LoaderManager;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -39,7 +41,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
+        NavigationView.OnNavigationItemSelectedListener, TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {
+
+
     private android.support.v7.widget.Toolbar mToolbar;
     private DrawerLayout drawerLayout;
     public Typeface futuraFont;
@@ -131,6 +136,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        if (lastVisitedFragment.equals(R.string.title_inbox)){
+            navigationView.setCheckedItem(R.id.nav_inbox);
+        }
+        else if(lastVisitedFragment.equals(R.string.title_list)){
+            navigationView.setCheckedItem(R.id.nav_list);
+        }
+
     }
 
     @Override
@@ -166,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.nav_settings:
                 Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(i);
+                navigationView.setCheckedItem(lastVisitedFragment.equals(R.string.title_inbox) ? R.id.nav_inbox : R.id.nav_list);
+
                 break;
 
             case R.id.nav_logout:
@@ -177,6 +191,13 @@ public class MainActivity extends AppCompatActivity implements
 
         }
         drawerLayout.closeDrawer(GravityCompat.START);
+
+        if (lastVisitedFragment.equals(R.string.title_inbox)){
+            navigationView.setCheckedItem(R.id.nav_inbox);
+        }
+        else if(lastVisitedFragment.equals(R.string.title_list)){
+            navigationView.setCheckedItem(R.id.nav_list);
+        }
         return true;
     }
 
@@ -232,6 +253,5 @@ public class MainActivity extends AppCompatActivity implements
         Button button = FullScreenDialog.btnOpenDatePicker;
         button.setText(dayOfMonth + "/" + month + "/" + year);
     }
-
 
 }

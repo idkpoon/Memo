@@ -8,22 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/tv_inbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_inbox"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/displayNumViews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/number_of_rows"
-        android:textSize="14sp"
-        android:layout_below="@+id/tv_inbox"
-        android:layout_marginTop="50dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
     </RelativeLayout>
 </FrameLayout>

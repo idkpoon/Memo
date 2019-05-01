@@ -24,12 +24,13 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.android.memo.Activity.AddTodoActivity;
 import com.example.android.memo.Activity.MainActivity;
 import com.example.android.memo.Activity.SettingsActivity;
 import com.example.android.memo.R;
+import com.example.android.memo.database.TodoCursorAdapter;
 import com.example.android.memo.database.TodoDBHelper;
 import com.example.android.memo.database.TodoContract.TodoEntry;
+import com.example.android.memo.fragments.InboxFragment;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,14 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
     ImageView save;
     EditText etTaskName;
     Spinner prioritySpinner, categorySpinner;
+    TodoCursorAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialogStyle);
         setHasOptionsMenu(true);
+        adapter = InboxFragment.adapter;
 
     }
 
@@ -168,6 +171,7 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
 
             Toast.makeText(getContext(), "Insert task Success", Toast.LENGTH_SHORT).show();
         }
+        adapter.swapCursor(InboxFragment.getAllItems());
 
 
     }
