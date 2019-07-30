@@ -166,10 +166,11 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         Uri newUri = getContext().getContentResolver().insert(TodoEntry.CONTENT_URI, contentValues);
 
         if (newUri == null) {
-            Toast.makeText(getContext(), "Insert task Failed", Toast.LENGTH_SHORT).show();
-        } else {
+            Toast.makeText(getContext(), "Error, try again", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(getContext(), "Insert task Success", Toast.LENGTH_SHORT).show();
+        } else {
+            dismiss();
+            Toast.makeText(getContext(), "Task Added!", Toast.LENGTH_SHORT).show();
         }
         adapter.swapCursor(InboxFragment.getAllItems());
 

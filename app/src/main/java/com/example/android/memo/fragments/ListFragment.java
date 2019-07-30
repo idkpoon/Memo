@@ -1,6 +1,10 @@
-package com.example.android.memo;
+package com.example.android.memo.fragments;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.memo.Activity.MainActivity;
+import com.example.android.memo.R;
+import com.example.android.memo.TabTemplate;
+import com.example.android.memo.database.TodoContract.TodoEntry;
+import com.example.android.memo.database.TodoDBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +34,8 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int currentPosition;
+    private String COLOUR_PREFERENCES;
+    TodoDBHelper mDBHelper;
 
 
     @Nullable
@@ -35,6 +45,8 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
+        COLOUR_PREFERENCES = "ColorPreferences";
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -58,15 +70,15 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     }
 
     private void setupViewPager(ViewPager viewPager) {
-
-        String[] oneList = {"Catherine of Aragon", "Anne Boleyn", "Jane Seymour", "Anne of Cleves", "Katherine Howard", "Catherine Howard"};
-        String[] twoList = {"Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"};
-        String[] threeList = {"Cookies", "Muffins", "Cupcakes", "Cake", "Banana Bread", "Tiramisu", "Ice cream"};
-
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(COLOUR_PREFERENCES, Context.MODE_PRIVATE);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(TabTemplate.newInstance("One", oneList), "ONE");
-        adapter.addFragment(TabTemplate.newInstance("Two", twoList), "TWO");
-        adapter.addFragment(TabTemplate.newInstance("Three", threeList), "THREE");
+        String[] defaultNames = {"School", "Errands", "Personal", "Other"};
+
+        for(int i = 1; i <=4; i++){
+            String catName = sharedPreferences.getString("categoryName" + Integer.toString(i), defaultNames[i-1]);
+            adapter.addFragment(TabTemplate.newInstance(i), catName);
+        }
+
         viewPager.setAdapter(adapter);
     }
 
@@ -79,6 +91,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     public void onPageSelected(int position) {
         this.currentPosition = position;
         Log.v(getClass().getSimpleName(), "Current Position from onPageSelected() : " + currentPosition);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(COLOUR_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -115,5 +128,23 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    private void getList(){
+        String[] projection = {
+                TodoEntry._ID,
+                TodoEntry.COLUMN_TODO_NAME,
+                TodoEntry.COLUMN_TODO_DATE,
+                TodoEntry.COLUMN_TODO_TIME,
+                TodoEntry.COLUMN_TODO_CATEGORY,
+                TodoEntry.COLUMN_TODO_PRIORITY};
+
+        mDBHelper = new TodoDBHelper(getContext());
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = getContext().getContentResolver().query(TodoEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
     }
 }

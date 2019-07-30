@@ -23,12 +23,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.android.memo.CustomTypefaceSpan;
-import com.example.android.memo.ListFragment;
+import com.example.android.memo.fragments.ListFragment;
 import com.example.android.memo.R;
 import com.example.android.memo.dialogs.FullScreenDialog;
 import com.example.android.memo.fragments.InboxFragment;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements
     private TextView mTitle;
     private NavigationView navigationView;
     private FloatingActionButton fabAdd;
+    private FrameLayout frameLayout;
 
     static ContentResolver contentResolver;
 
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         futuraFont = Typeface.createFromAsset(this.getAssets(), "Fonts/Futura-Medium.ttf");
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        frameLayout = (FrameLayout) findViewById(R.id.fragment_main_container);
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -178,14 +183,15 @@ public class MainActivity extends AppCompatActivity implements
                 elevation = 4.0f;
                 fragmentTransaction.replace(R.id.fragment_main_container, new InboxFragment()).commit();
                 mTitle.setText(R.string.title_inbox);
-                Toast.makeText(this, "Frag changed to inbox", Toast.LENGTH_SHORT).show();
                 lastVisitedFragment = getString(R.string.title_inbox);
                 break;
             case R.id.nav_list:
-                elevation = 0.0f;
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)frameLayout.getLayoutParams();
+
+                params.topMargin = 100;
+
                 fragmentTransaction.replace(R.id.fragment_main_container, new ListFragment()).commit();
                 mTitle.setText(R.string.title_list);
-                Toast.makeText(this, "Frag changed to list", Toast.LENGTH_SHORT).show();
                 navigationView.setCheckedItem(R.id.nav_list);
                 lastVisitedFragment = getString(R.string.title_list);
                 break;
@@ -198,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
             case R.id.nav_logout:
-                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();
                 i = new Intent(MainActivity.this, WelcomeActivity.class);
                 startActivity(i);

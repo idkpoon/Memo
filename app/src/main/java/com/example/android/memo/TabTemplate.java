@@ -1,5 +1,7 @@
 package com.example.android.memo;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,20 +14,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.memo.database.TodoCursorAdapter;
+import com.example.android.memo.database.TodoDBHelper;
+import com.example.android.memo.database.TodoContract.TodoEntry;
+
 import java.util.ArrayList;
 
 /**
  * Created by 21poonkw1 on 30/7/2019.
  */
 
-public class TabTemplate extends Fragment implements RecyclerAdapter.ItemClickListener{
+public class TabTemplate extends Fragment {
 
 
-    TextView tvTitle;
     RecyclerView recyclerView;
-    private String mTitle;
-    private ArrayList<String> mArrayList;
-    RecyclerAdapter adapter;
+    private int mIndex;
+    TodoCursorAdapter adapter;
+    TodoDBHelper mDBHelper;
 
     public TabTemplate(){
 
@@ -34,28 +39,19 @@ public class TabTemplate extends Fragment implements RecyclerAdapter.ItemClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTitle = getArguments().getString("title", "No value");
+        mIndex = getArguments().getInt("index", 1);
 
-        mArrayList = new ArrayList<>();
-
-        String[] strings = getArguments().getStringArray("array");
-        for (int i = 0; i < strings.length; i++){
-            mArrayList.add(strings[i]);
-        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tab_template, container, false);
-        tvTitle = (TextView) rootView.findViewById(R.id.titleText);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        tvTitle.setText(mTitle);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new RecyclerAdapter(getContext(), mArrayList);
-        adapter.setClickListener(this);
+        adapter = new TodoCursorAdapter(getContext(), getCursor(mIndex));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
@@ -66,19 +62,36 @@ public class TabTemplate extends Fragment implements RecyclerAdapter.ItemClickLi
         return rootView;
     }
 
-    public static TabTemplate newInstance(String title, String[] array) {
+    public static TabTemplate newInstance(int index) {
         
         Bundle args = new Bundle();
-        args.putString("title", title);
-        args.putStringArray("array", array);
+        args.putInt("index", index);
         TabTemplate fragment = new TabTemplate();
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+
+    private Cursor getCursor(int index){
+        String[] args = {Integer.toString(index)};
+
+        String[] projection = {
+                TodoEntry._ID,
+                TodoEntry.COLUMN_TODO_NAME,
+                TodoEntry.COLUMN_TODO_DATE,
+                TodoEntry.COLUMN_TODO_TIME,
+                TodoEntry.COLUMN_TODO_CATEGORY,
+                TodoEntry.COLUMN_TODO_PRIORITY};
+
+        mDBHelper = new TodoDBHelper(getContext());
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = getContext().getContentResolver().query(TodoEntry.CONTENT_URI,
+                projection,
+                "category=?",
+                args,
+                null);
+
+        return cursor;
     }
 
 

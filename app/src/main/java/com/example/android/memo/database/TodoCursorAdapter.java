@@ -68,7 +68,7 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
         int catColor = sharedPreferences.getInt("savedColor" + cat, 12597547);
         Log.v(getClass().getSimpleName(), "Category color: " + catColor);
-        int priorityColor = sharedPreferences.getInt("savedColor" + String.valueOf(priority+4), 12597547);
+        int priorityColor = sharedPreferences.getInt("savedColor" + priority+4, 12597547);
         holder.nameTextView.setText(name);
 
         String hexColor = String.format("#%06X", (0xFFFFFF & catColor));
