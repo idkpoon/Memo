@@ -2,14 +2,9 @@ package com.example.android.memo.Activity;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
-import android.app.LoaderManager;
 import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.Menu;
@@ -30,12 +26,12 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.example.android.memo.CustomTypefaceSpan;
+import com.example.android.memo.ListFragment;
+import com.example.android.memo.R;
 import com.example.android.memo.dialogs.FullScreenDialog;
 import com.example.android.memo.fragments.InboxFragment;
-import com.example.android.memo.fragments.ListFragment;
-import com.example.android.memo.database.TodoContract.TodoEntry;
-import com.example.android.memo.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener {
 
 
-    private android.support.v7.widget.Toolbar mToolbar;
+    private static android.support.v7.widget.Toolbar mToolbar;
     private DrawerLayout drawerLayout;
     public Typeface futuraFont;
     private TextView mTitle;
@@ -133,7 +129,18 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+    public static Toolbar getmToolbar() {
+        return mToolbar;
+    }
+
+    public void setmToolbar(Toolbar mToolbar) {
+        this.mToolbar = mToolbar;
+    }
+
+
+
     @Override
+    @TargetApi(21)
     protected void onStart() {
         super.onStart();
         if (lastVisitedFragment.equals(R.string.title_inbox)){
@@ -142,10 +149,12 @@ public class MainActivity extends AppCompatActivity implements
         else if(lastVisitedFragment.equals(R.string.title_list)){
             navigationView.setCheckedItem(R.id.nav_list);
         }
+        MainActivity.getmToolbar().setElevation(4.0f);
 
     }
 
     @Override
+    @TargetApi(21)
     protected void onResume() {
         super.onResume();
         if (lastVisitedFragment.equals(R.string.title_inbox)){
@@ -154,21 +163,26 @@ public class MainActivity extends AppCompatActivity implements
         else if(lastVisitedFragment.equals(R.string.title_list)){
             navigationView.setCheckedItem(R.id.nav_list);
         }
+        MainActivity.getmToolbar().setElevation(4.0f);
     }
 
+    @TargetApi(21)
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        float elevation = 4.0f;
 
         switch(item.getItemId()){
             case R.id.nav_inbox:
+                elevation = 4.0f;
                 fragmentTransaction.replace(R.id.fragment_main_container, new InboxFragment()).commit();
                 mTitle.setText(R.string.title_inbox);
                 Toast.makeText(this, "Frag changed to inbox", Toast.LENGTH_SHORT).show();
                 lastVisitedFragment = getString(R.string.title_inbox);
                 break;
             case R.id.nav_list:
+                elevation = 0.0f;
                 fragmentTransaction.replace(R.id.fragment_main_container, new ListFragment()).commit();
                 mTitle.setText(R.string.title_list);
                 Toast.makeText(this, "Frag changed to list", Toast.LENGTH_SHORT).show();
@@ -176,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements
                 lastVisitedFragment = getString(R.string.title_list);
                 break;
             case R.id.nav_settings:
+                elevation = 4.0f;
                 Intent i = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(i);
                 navigationView.setCheckedItem(lastVisitedFragment.equals(R.string.title_inbox) ? R.id.nav_inbox : R.id.nav_list);
@@ -190,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
         }
+        mToolbar.setElevation(elevation);
         drawerLayout.closeDrawer(GravityCompat.START);
 
         if (lastVisitedFragment.equals(R.string.title_inbox)){
