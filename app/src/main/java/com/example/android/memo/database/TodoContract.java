@@ -33,6 +33,7 @@ public class TodoContract {
         public final static String COLUMN_TODO_DATE = "date";
         public final static String COLUMN_TODO_CATEGORY = "category";
         public final static String COLUMN_TODO_PRIORITY = "priority";
+        public final static String COLUMN_TODO_STATUS = "status";
 
     }
 }

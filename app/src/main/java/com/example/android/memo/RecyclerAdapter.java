@@ -62,6 +62,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     // convenience method for getting data at click position
     String getItem(int id) {
+
         return mData.get(id);
     }
 

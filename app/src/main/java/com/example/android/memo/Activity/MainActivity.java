@@ -177,6 +177,9 @@ public class MainActivity extends AppCompatActivity implements
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         float elevation = 4.0f;
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) frameLayout.getLayoutParams();
+
+        params.addRule(RelativeLayout.BELOW, mToolbar.getId());
 
         switch(item.getItemId()){
             case R.id.nav_inbox:
@@ -184,11 +187,12 @@ public class MainActivity extends AppCompatActivity implements
                 fragmentTransaction.replace(R.id.fragment_main_container, new InboxFragment()).commit();
                 mTitle.setText(R.string.title_inbox);
                 lastVisitedFragment = getString(R.string.title_inbox);
+
+
                 break;
             case R.id.nav_list:
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)frameLayout.getLayoutParams();
+                params = (RelativeLayout.LayoutParams)frameLayout.getLayoutParams();
 
-                params.topMargin = 100;
 
                 fragmentTransaction.replace(R.id.fragment_main_container, new ListFragment()).commit();
                 mTitle.setText(R.string.title_list);

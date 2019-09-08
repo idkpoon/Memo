@@ -162,6 +162,7 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         contentValues.put(TodoEntry.COLUMN_TODO_TIME, time);
         contentValues.put(TodoEntry.COLUMN_TODO_CATEGORY, category);
         contentValues.put(TodoEntry.COLUMN_TODO_PRIORITY, priority);
+        contentValues.put(TodoEntry.COLUMN_TODO_STATUS, "not done");
 
         Uri newUri = getContext().getContentResolver().insert(TodoEntry.CONTENT_URI, contentValues);
 

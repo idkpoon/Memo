@@ -26,7 +26,8 @@ public class TodoDBHelper extends SQLiteOpenHelper {
                 + TodoEntry.COLUMN_TODO_TIME + " TEXT, "
                 + TodoEntry.COLUMN_TODO_DATE + " TEXT, "
                 + TodoEntry.COLUMN_TODO_CATEGORY + " TEXT, "
-                + TodoEntry.COLUMN_TODO_PRIORITY + " TEXT);";
+                + TodoEntry.COLUMN_TODO_PRIORITY + " TEXT, "
+                + TodoEntry.COLUMN_TODO_STATUS + " TEXT);";
 
         db.execSQL(SQL_CREATE_STATEMENT);
 
