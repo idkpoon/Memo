@@ -15,6 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.memo.R;
+import com.example.android.memo.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 21poonkw1 on 1/5/2019.
@@ -24,11 +28,15 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
     private Context mContext;
     private Cursor mCursor;
+
+    private List<Task> tasksList;
+
     public TodoCursorAdapter(Context context, Cursor cursor){
 
         mContext = context;
         mCursor = cursor;
     }
+
 
     public class TodoViewHolder extends RecyclerView.ViewHolder{
 
@@ -38,6 +46,8 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
         public TodoViewHolder(View itemView) {
             super(itemView);
+
+            tasksList = new ArrayList<>();
 
             nameTextView = itemView.findViewById(R.id.name);
             flagImageView = itemView.findViewById(R.id.flagColor);
@@ -59,10 +69,16 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         if(!mCursor.moveToPosition(position)){
             return;
         }
-
+        int id = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry._ID));
         String name = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_NAME));
+        String date = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_DATE));
+        String time = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_TIME));
+        String status = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_STATUS));
         int cat = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_CATEGORY));
         int priority = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_PRIORITY));
+
+       Task task = new Task(id, name, date, time, cat, priority, status);
+       tasksList.add(task);
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("ColorPreferences", Context.MODE_PRIVATE);
 
@@ -100,5 +116,11 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         }
     }
 
+    public List<Task> getTasksList() {
+        return this.tasksList;
+    }
 
+    public void setTasksList(List<Task> tasksList) {
+        this.tasksList = tasksList;
+    }
 }

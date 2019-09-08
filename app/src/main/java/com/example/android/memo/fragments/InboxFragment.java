@@ -15,14 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.memo.Activity.MainActivity;
 import com.example.android.memo.R;
+import com.example.android.memo.Task;
 import com.example.android.memo.database.TodoContract;
 import com.example.android.memo.database.TodoCursorAdapter;
 import com.example.android.memo.database.TodoDBHelper;
 import com.example.android.memo.database.TodoContract.TodoEntry;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class InboxFragment extends Fragment {
@@ -52,16 +56,28 @@ public class InboxFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL);
         recyclerView.addItemDecoration(itemDecor);
-
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
         adapter = new TodoCursorAdapter(getContext(), getAllItems());
+
         recyclerView.setAdapter(adapter);
-
-
-
         return root;
 
 
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//            viewHolder.getAdapterPosition();
+//            adapter.notifyDataSetChanged();
+        }
+    };
 
 
     @Override
@@ -79,6 +95,7 @@ public class InboxFragment extends Fragment {
                 TodoEntry.COLUMN_TODO_DATE,
                 TodoEntry.COLUMN_TODO_TIME,
                 TodoEntry.COLUMN_TODO_CATEGORY,
+                TodoEntry.COLUMN_TODO_STATUS,
                 TodoEntry.COLUMN_TODO_PRIORITY};
 
         mDBHelper = new TodoDBHelper(getMyContext());
@@ -95,4 +112,6 @@ public class InboxFragment extends Fragment {
     public static Context getMyContext(){
         return context;
     }
+
+
 }

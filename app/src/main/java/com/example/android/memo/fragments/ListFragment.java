@@ -139,6 +139,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
                 TodoEntry.COLUMN_TODO_DATE,
                 TodoEntry.COLUMN_TODO_TIME,
                 TodoEntry.COLUMN_TODO_CATEGORY,
+                TodoEntry.COLUMN_TODO_STATUS,
                 TodoEntry.COLUMN_TODO_PRIORITY};
 
         mDBHelper = new TodoDBHelper(getContext());

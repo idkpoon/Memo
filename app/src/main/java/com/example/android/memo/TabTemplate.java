@@ -81,6 +81,7 @@ public class TabTemplate extends Fragment {
                 TodoEntry.COLUMN_TODO_DATE,
                 TodoEntry.COLUMN_TODO_TIME,
                 TodoEntry.COLUMN_TODO_CATEGORY,
+                TodoEntry.COLUMN_TODO_STATUS,
                 TodoEntry.COLUMN_TODO_PRIORITY};
 
         mDBHelper = new TodoDBHelper(getContext());
