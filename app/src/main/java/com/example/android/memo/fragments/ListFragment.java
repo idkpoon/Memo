@@ -38,6 +38,8 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     TodoDBHelper mDBHelper;
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
