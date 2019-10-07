@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.memo.ItemDeleted;
 import com.example.android.memo.R;
 import com.example.android.memo.TabTemplate;
 import com.example.android.memo.Task;
@@ -29,13 +30,15 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
     private Context mContext;
     private Cursor mCursor;
-    private List<Task> mCurrentList;
+    List<Task> taskList;
+    Task mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPosition;
+    ItemDeleted itemDeleted;
 
     public TodoCursorAdapter(Context context, Cursor cursor){
 
         mContext = context;
         mCursor = cursor;
-        mCurrentList = new ArrayList<>();
 
     }
 
@@ -56,9 +59,6 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         }
     }
 
-    public List<Task> getCurrentList() {
-        return mCurrentList;
-    }
 
     @NonNull
     @Override
@@ -121,6 +121,40 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
             notifyDataSetChanged();
         }
     }
+
+    public List<Task> getList(){
+        taskList = new ArrayList<>();
+
+        while(mCursor.moveToNext()) {
+            int id = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry._ID));
+            String name = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_NAME));
+            String date = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_DATE));
+            String time = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_TIME));
+            String status = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_STATUS));
+            int cat = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_CATEGORY));
+            int priority = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_PRIORITY));
+
+            Task task = new Task(id, name, date, time, cat, priority, status);
+            taskList.add(task);
+        }
+
+        return taskList;
+
+    }
+
+    public void deleteItem(int position) {
+        mRecentlyDeletedItem = taskList.get(position);
+        mRecentlyDeletedItemPosition = position;
+        itemDeleted.onItemDeleted(position);
+        taskList.remove(position);
+
+//        showUndoSnackbar();
+    }
+
+    public void setOnItemDeleted(ItemDeleted listener){
+        itemDeleted = listener;
+    }
+
 
 
 }

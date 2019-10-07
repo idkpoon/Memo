@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import com.example.android.memo.Activity.MainActivity;
 import com.example.android.memo.R;
 import com.example.android.memo.TabTemplate;
+import com.example.android.memo.Task;
 import com.example.android.memo.database.TodoContract.TodoEntry;
 import com.example.android.memo.database.TodoDBHelper;
 
@@ -36,6 +37,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     private int currentPosition;
     private String COLOUR_PREFERENCES;
     TodoDBHelper mDBHelper;
+    ViewPagerAdapter adapter;
 
 
 
@@ -73,7 +75,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
 
     private void setupViewPager(ViewPager viewPager) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(COLOUR_PREFERENCES, Context.MODE_PRIVATE);
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        adapter = new ViewPagerAdapter(getChildFragmentManager());
         String[] defaultNames = {"School", "Errands", "Personal", "Other"};
 
         for(int i = 1; i <=4; i++){
@@ -92,9 +94,13 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
 
     @Override
     public void onPageSelected(int position) {
-        this.currentPosition = position;
-        Log.v(getClass().getSimpleName(), "Current Position from onPageSelected() : " + position);
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(COLOUR_PREFERENCES, Context.MODE_PRIVATE);
+        this.currentPosition = position+1;
+        TabTemplate tabTemplate = (TabTemplate) adapter.mFragmentList.get(position);
+
+        List<Task> listItems = tabTemplate.getList();
+        Log.v(getClass().getSimpleName(), "Current Position from onPageSelected() : "
+                + Integer.toString(currentPosition));
+        Log.v(getTag(), "Cursor count: " + listItems.size());
 
 
     }
@@ -111,6 +117,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
         private String TAG = getClass().getSimpleName();
 
         public ViewPagerAdapter(FragmentManager manager) {
+
             super(manager);
         }
 

@@ -35,7 +35,6 @@ public class TabTemplate extends Fragment {
     private int mIndex;
     TodoCursorAdapter adapter;
     TodoDBHelper mDBHelper;
-    public static List<Task>  mCurrentList;
 
     public TabTemplate(){
 
@@ -51,23 +50,36 @@ public class TabTemplate extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mCurrentList = new ArrayList<>();
 
         View rootView = inflater.inflate(R.layout.fragment_tab_template, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new TodoCursorAdapter(getContext(), getMyCursor(mIndex));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setAdapter(adapter);
-        mCurrentList = adapter.getCurrentList();
-
-
+        refresh();
         return rootView;
+    }
+
+    private void refresh(){
+        adapter = new TodoCursorAdapter(getContext(), getMyCursor(mIndex));
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        refresh();
     }
 
     public static TabTemplate newInstance(int index) {
@@ -81,9 +93,7 @@ public class TabTemplate extends Fragment {
 
 
     private Cursor getMyCursor(int index){
-        String[] args = {
-                Integer.toString(index), "not done"
-        };
+
 
         String[] projection = {
                 TodoEntry._ID,
@@ -94,18 +104,45 @@ public class TabTemplate extends Fragment {
                 TodoEntry.COLUMN_TODO_STATUS,
                 TodoEntry.COLUMN_TODO_PRIORITY};
 
+        String selections = TodoEntry.COLUMN_TODO_CATEGORY + "=? AND " + TodoEntry.COLUMN_TODO_STATUS
+                + "=?";
+
+        Log.v(getTag(), "Index: " + Integer.toString(index));
+
+        String[] args = {
+                Integer.toString(index), "not done"
+        };
+
         mDBHelper = new TodoDBHelper(getContext());
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = getContext().getContentResolver().query(TodoEntry.CONTENT_URI,
                 projection,
-                "category=? AND status=?",
+                selections,
                 args,
                 null);
 
         return cursor;
+
     }
 
+    public List<Task> getList(){
+        List<Task> taskList = new ArrayList<>();
+        Cursor mCursor = getMyCursor(mIndex);
+        while(mCursor.moveToNext()) {
+            int id = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry._ID));
+            String name = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_NAME));
+            String date = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_DATE));
+            String time = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_TIME));
+            String status = mCursor.getString(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_STATUS));
+            int cat = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_CATEGORY));
+            int priority = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_PRIORITY));
 
+            Task task = new Task(id, name, date, time, cat, priority, status);
+            taskList.add(task);
+        }
+
+        return taskList;
+    }
 
 
 
