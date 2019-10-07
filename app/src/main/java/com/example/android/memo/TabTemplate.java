@@ -1,5 +1,6 @@
 package com.example.android.memo;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -28,13 +29,15 @@ import java.util.List;
  * Created by 21poonkw1 on 30/7/2019.
  */
 
-public class TabTemplate extends Fragment {
+public class TabTemplate extends Fragment implements ItemDeleted{
 
 
     RecyclerView recyclerView;
     private int mIndex;
     TodoCursorAdapter adapter;
     TodoDBHelper mDBHelper;
+    List<Task> taskList;
+    List<Task> completedItemsList;
 
     public TabTemplate(){
 
@@ -44,6 +47,7 @@ public class TabTemplate extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIndex = getArguments().getInt("index", 1);
+        completedItemsList = new ArrayList<>();
 
     }
 
@@ -60,7 +64,16 @@ public class TabTemplate extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        refresh();
+        adapter = new TodoCursorAdapter(getContext(), getMyCursor(mIndex));
+
+        adapter.setOnItemDeleted(this);
+        recyclerView.setAdapter(adapter);
+        taskList = adapter.getList();
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
         return rootView;
     }
 
@@ -144,7 +157,58 @@ public class TabTemplate extends Fragment {
         return taskList;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        updateInfo();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        updateInfo();
+
+    }
+
+    private void updateInfo(){
+        TodoDBHelper mDBHelper = new TodoDBHelper(getContext());
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+
+        int count = completedItemsList.size();
 
 
+        for(int i = 0; i < completedItemsList.size(); i++) {
+            Task task = completedItemsList.get(i);
 
+            Log.v(getTag(), task.getName() + " " + task.getDate() + " " + task.getTime()
+                    + " " + task.getCategory() + " " + task.getPriority() +  " " + task.getStatus());
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TodoEntry.COLUMN_TODO_NAME, task.getName());
+            contentValues.put(TodoEntry.COLUMN_TODO_DATE, task.getDate());
+            contentValues.put(TodoEntry.COLUMN_TODO_TIME, task.getTime());
+            contentValues.put(TodoEntry.COLUMN_TODO_CATEGORY, task.getCategory());
+            contentValues.put(TodoEntry.COLUMN_TODO_PRIORITY, task.getPriority());
+            contentValues.put(TodoEntry.COLUMN_TODO_STATUS, "done");
+
+
+            db.update(TodoEntry.TABLE_NAME, contentValues,
+                    "_id="+ task.getId(), null);
+        }
+        Log.v(getTag(), "Info has been updated");
+
+    }
+
+    @Override
+    public void onItemDeleted(int position) {
+        Log.v(getTag(), "Item " + position + " is deleted");
+        Task deletedTask = taskList.get(position);
+
+
+        Log.v(getTag(), "Task Name: " + deletedTask.getName());
+        completedItemsList.add(deletedTask);
+    }
 }
+
+
