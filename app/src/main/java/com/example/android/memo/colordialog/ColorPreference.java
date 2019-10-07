@@ -198,7 +198,8 @@ public class ColorPreference extends Preference implements ColorDialog.OnColorSe
         Drawable drawable = colorChoiceDrawable;
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(SettingsActivity.COLOR_PREFERENCES, Context.MODE_PRIVATE);
-        int savedColor = sharedPreferences.getInt("savedColor" + String.valueOf(CategoriesPreferenceFragment.getCurrentPreference()), 0);
+        int savedColor = sharedPreferences.getInt("savedColor" + Integer.toString(CategoriesPreferenceFragment.getCurrentPreference()), 0);
+
         if (selected) {
             VectorDrawable vectorCheck = (VectorDrawable) res.getDrawable(isColorDark(color)
                     ? R.drawable.ic_check_white

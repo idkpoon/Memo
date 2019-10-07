@@ -69,7 +69,7 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
                 dismiss();
             }
         });
-        toolbar.setTitle("My Dialog");
+        toolbar.setTitle("Add Task");
         toolbar.inflateMenu(R.menu.add_todo_menu);
         toolbar.setOnMenuItemClickListener(this);
 
