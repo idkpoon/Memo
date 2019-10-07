@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -156,6 +157,7 @@ public class FullScreenDialog extends DialogFragment implements View.OnClickList
         String priority = String.valueOf(prioritySpinner.getSelectedItemPosition()+1);
         String category = String.valueOf(categorySpinner.getSelectedItemPosition()+1);
 
+        Log.v(getTag(), "Category is " + category);
         ContentValues contentValues = new ContentValues();
         contentValues.put(TodoEntry.COLUMN_TODO_NAME, name);
         contentValues.put(TodoEntry.COLUMN_TODO_DATE, dueDate);

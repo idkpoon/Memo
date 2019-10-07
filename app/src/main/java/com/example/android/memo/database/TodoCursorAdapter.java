@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.memo.R;
+import com.example.android.memo.TabTemplate;
 import com.example.android.memo.Task;
 
 import java.util.ArrayList;
@@ -28,13 +29,14 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
     private Context mContext;
     private Cursor mCursor;
-
-    private List<Task> tasksList;
+    private List<Task> mCurrentList;
 
     public TodoCursorAdapter(Context context, Cursor cursor){
 
         mContext = context;
         mCursor = cursor;
+        mCurrentList = new ArrayList<>();
+
     }
 
 
@@ -42,17 +44,20 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
         public TextView nameTextView;
         public ImageView flagImageView;
-        public LinearLayout linearLayout;
+        public LinearLayout catView;
 
         public TodoViewHolder(View itemView) {
             super(itemView);
 
-            tasksList = new ArrayList<>();
 
             nameTextView = itemView.findViewById(R.id.name);
             flagImageView = itemView.findViewById(R.id.flagColor);
-            linearLayout = itemView.findViewById(R.id.categoryColor);
+            catView = itemView.findViewById(R.id.categoryColor);
         }
+    }
+
+    public List<Task> getCurrentList() {
+        return mCurrentList;
     }
 
     @NonNull
@@ -77,8 +82,6 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         int cat = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_CATEGORY));
         int priority = mCursor.getInt(mCursor.getColumnIndex(TodoContract.TodoEntry.COLUMN_TODO_PRIORITY));
 
-       Task task = new Task(id, name, date, time, cat, priority, status);
-       tasksList.add(task);
 
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("ColorPreferences", Context.MODE_PRIVATE);
 
@@ -88,7 +91,7 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         holder.nameTextView.setText(name);
 
         String hexColor = String.format("#%06X", (0xFFFFFF & catColor));
-        holder.linearLayout.setBackgroundColor(Color.parseColor(hexColor));
+        holder.catView.setBackgroundColor(Color.parseColor(hexColor));
 
         hexColor = String.format("#%06X", (0xFFFFFF & priorityColor));
         Log.v(getClass().getSimpleName(), "Priority color: " + hexColor);
@@ -99,8 +102,11 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
 
     }
 
+
+
     @Override
     public int getItemCount() {
+
         return mCursor.getCount();
     }
 
@@ -116,11 +122,5 @@ public class TodoCursorAdapter extends RecyclerView.Adapter<TodoCursorAdapter.To
         }
     }
 
-    public List<Task> getTasksList() {
-        return this.tasksList;
-    }
 
-    public void setTasksList(List<Task> tasksList) {
-        this.tasksList = tasksList;
-    }
 }

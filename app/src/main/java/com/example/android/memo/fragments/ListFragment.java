@@ -28,7 +28,7 @@ import com.example.android.memo.database.TodoDBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class ListFragment extends Fragment implements ViewPager.OnPageChangeListener{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -84,6 +84,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
         viewPager.setAdapter(adapter);
     }
 
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -92,8 +93,10 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     @Override
     public void onPageSelected(int position) {
         this.currentPosition = position;
-        Log.v(getClass().getSimpleName(), "Current Position from onPageSelected() : " + currentPosition);
+        Log.v(getClass().getSimpleName(), "Current Position from onPageSelected() : " + position);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(COLOUR_PREFERENCES, Context.MODE_PRIVATE);
+
+
     }
 
     @Override
@@ -104,6 +107,7 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+
         private String TAG = getClass().getSimpleName();
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -132,22 +136,6 @@ public class ListFragment extends Fragment implements ViewPager.OnPageChangeList
         }
     }
 
-    private void getList(){
-        String[] projection = {
-                TodoEntry._ID,
-                TodoEntry.COLUMN_TODO_NAME,
-                TodoEntry.COLUMN_TODO_DATE,
-                TodoEntry.COLUMN_TODO_TIME,
-                TodoEntry.COLUMN_TODO_CATEGORY,
-                TodoEntry.COLUMN_TODO_STATUS,
-                TodoEntry.COLUMN_TODO_PRIORITY};
 
-        mDBHelper = new TodoDBHelper(getContext());
-        SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = getContext().getContentResolver().query(TodoEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-    }
+
 }
